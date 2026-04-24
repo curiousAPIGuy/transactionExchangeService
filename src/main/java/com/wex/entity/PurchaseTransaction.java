@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -28,7 +28,7 @@ public class PurchaseTransaction {
 
     private String description;
 
-    private LocalDate transactionDate;
+    private LocalDateTime transactionDate;
 
     // We store the exact number, it should be rounded to 2 decimals when provided.
     private BigDecimal amount;

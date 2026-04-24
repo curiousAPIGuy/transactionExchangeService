@@ -36,7 +36,7 @@ public class PurchaseTransactionService {
         PurchaseTransaction transaction = repository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException("Purchase transaction with id " + id + " not found."));
 
-        TreasuryApiResponse apiResponse = treasuryApiClient.getExchangeRates(targetCurrency, transaction.getTransactionDate());
+        TreasuryApiResponse apiResponse = treasuryApiClient.getExchangeRates(targetCurrency, transaction.getTransactionDate().toLocalDate());
 
         if (apiResponse == null || apiResponse.getData() == null || apiResponse.getData().isEmpty()) {
             throw new ConversionRateUnavailableException(
@@ -50,7 +50,7 @@ public class PurchaseTransactionService {
         return ConvertedTransactionResponse.builder()
                 .identifier(transaction.getId())
                 .description(transaction.getDescription())
-                .transactionDate(transaction.getTransactionDate())
+                .transactionDate(transaction.getTransactionDate().toLocalDate())
                 .originalUsDollarAmount(transaction.getAmount())
                 .exchangeRateUsed(exchangeRate)
                 .convertedAmount(convertedAmount)

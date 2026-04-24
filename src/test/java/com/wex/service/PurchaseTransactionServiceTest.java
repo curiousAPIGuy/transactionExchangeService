@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,14 +42,14 @@ public class PurchaseTransactionServiceTest {
     void saveTransaction_shouldReturnSavedTransaction() {
         PurchaseTransactionRequest request = PurchaseTransactionRequest.builder()
                 .description("Test Description")
-                .transactionDate(LocalDate.of(2023, 10, 15))
+                .transactionDate(LocalDateTime.of(2023, 10, 15, 12, 0, 0))
                 .amount(BigDecimal.valueOf(100.123))
                 .build();
 
         PurchaseTransaction savedTransaction = PurchaseTransaction.builder()
                 .id(UUID.randomUUID())
                 .description("Test Description")
-                .transactionDate(LocalDate.of(2023, 10, 15))
+                .transactionDate(LocalDateTime.of(2023, 10, 15, 12, 0, 0))
                 .amount(BigDecimal.valueOf(100.12))
                 .build();
 
@@ -67,7 +68,7 @@ public class PurchaseTransactionServiceTest {
         PurchaseTransaction transaction = PurchaseTransaction.builder()
                 .id(id)
                 .description("Test")
-                .transactionDate(LocalDate.of(2023, 10, 15))
+                .transactionDate(LocalDateTime.of(2023, 10, 15, 12, 0, 0))
                 .amount(BigDecimal.valueOf(100.00))
                 .build();
 
@@ -77,7 +78,8 @@ public class PurchaseTransactionServiceTest {
         apiResponse.setData(Collections.singletonList(rate));
 
         when(repository.findById(id)).thenReturn(Optional.of(transaction));
-        when(treasuryApiClient.getExchangeRates("Euro", LocalDate.of(2023, 10, 15))).thenReturn(apiResponse);
+        when(treasuryApiClient.getExchangeRates("Euro", LocalDate.of(2023, 10, 15)))
+                .thenReturn(apiResponse);
 
         ConvertedTransactionResponse result = service.getConvertedTransaction(id, "Euro");
 
@@ -102,7 +104,7 @@ public class PurchaseTransactionServiceTest {
         PurchaseTransaction transaction = PurchaseTransaction.builder()
                 .id(id)
                 .description("Test")
-                .transactionDate(LocalDate.of(2023, 10, 15))
+                .transactionDate(LocalDateTime.of(2023, 10, 15, 12, 0, 0))
                 .amount(BigDecimal.valueOf(100.00))
                 .build();
 

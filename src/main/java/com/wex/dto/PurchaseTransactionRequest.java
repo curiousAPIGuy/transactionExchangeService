@@ -9,7 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
 @Builder
@@ -21,7 +22,8 @@ public class PurchaseTransactionRequest {
     private String description;
 
     @NotNull(message = "Transaction date is required")
-    private LocalDate transactionDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime transactionDate;
 
     // Amount must be positive decimal, rounded to nearest cent is handled by business logic or deserialization
     @NotNull(message = "Purchase amount is required")

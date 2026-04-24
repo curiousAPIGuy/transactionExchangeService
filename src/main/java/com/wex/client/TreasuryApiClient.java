@@ -8,6 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.wex.dto.TreasuryApiResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +38,16 @@ public class TreasuryApiClient {
                         currency, purchaseDate.toString(), sixMonthsAgo.toString()))
                 .queryParam("sort", "-record_date")
                 .queryParam("page[size]", 1)
-                .build(false) // don't encode here because RestTemplate encodes, and we need precise eq handling, wait, better use build()
+                .build(false) // don't encode here because RestTemplate encodes, and we need precise eq
+                              // handling, wait, better use build()
                 .toUriString();
 
         try {
             return restTemplate.getForObject(url, TreasuryApiResponse.class);
         } catch (RestClientException ex) {
             logger.error("Error communicating with Treasury API: {}", ex.getMessage());
-            throw new ConversionRateUnavailableException("Treasury API is currently unavailable or not responding. Please try again later.");
+            throw new ConversionRateUnavailableException(
+                    "Treasury API is currently unavailable or not responding. Please try again later.");
         }
     }
 }
